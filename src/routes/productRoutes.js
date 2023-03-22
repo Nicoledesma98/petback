@@ -48,9 +48,9 @@ routerProd.get('/:id', async(req,res)=>{
     }
 })
 routerProd.post('/', async (req,res) =>{
-    const {name, description, code, stock, category, price, quantity} = req.body
+    const {name, description, code, stock, category, price} = req.body
     try{
-        const producto = await prodMongoDB.addElements([{name, description, code, stock, category, price, quantity}])
+        const producto = await prodMongoDB.addElements([{name, description, code, stock, category, price}])
         res.status(204).json(producto)
     }catch (error){
         res.status(500).json({
@@ -81,9 +81,9 @@ routerProd.delete('/:id', async (req, res) => {
 })
 routerProd.put('/:id', async (req,res)=>{
     const {id} = req.params
-    const {name, description, code, stock, category, price, quantity} = req.body
+    const {name, description, code, stock, category, price} = req.body
     try{
-        const product = await prodMongoDB.updateElement(id,{name: name,description: description,code: code,stock: stock,category: category,price: price,quantity: quantity})
+        const product = await prodMongoDB.updateElement(id,{name: name,description: description,code: code,stock: stock,category: category,price: price})
         if(product){
             return res.status(200).json({
                 message:'producto actualizado'

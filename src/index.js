@@ -3,12 +3,14 @@ import express from "express"
 import { Server } from 'socket.io'
 import {getManagerMensajes} from './dao/daoManager.js'
 import routerProd from './routes/productRoutes.js'
+import routerCart from './routes/cartRoutes.js'
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use('/products',routerProd)
+app.use('/cart',routerCart)
 
 app.set('port',process.env.PORT || 5000)
 

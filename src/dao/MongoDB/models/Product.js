@@ -33,10 +33,6 @@ const prodSchema = new Schema({
         required: true,
         index: true
     },
-    quantity: { 
-        type: Number,
-        required: true
-    },
     image: []
 })
 prodSchema.plugin(paginate)
