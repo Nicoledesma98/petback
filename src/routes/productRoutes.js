@@ -2,7 +2,7 @@ import { Router } from "express";
 import { prodDaoMongoDB } from "../dao/MongoDB/models/Product.js";
 
 
-const prodMongoDB = new prodDaoMongoDB()
+ export const prodMongoDB = new prodDaoMongoDB()
 prodMongoDB.setConexion()
 const routerProd = Router()
 
