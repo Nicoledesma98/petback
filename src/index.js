@@ -1,5 +1,8 @@
 import 'dotenv/config'
 import express from "express"
+import session from 'express-session'
+import cookieParser from 'cookie-parser'
+import MongoStore from 'connect-mongo'
 import { Server } from 'socket.io'
 import {getManagerMensajes} from './dao/daoManager.js'
 import routerProd from './routes/productRoutes.js'
@@ -7,8 +10,21 @@ import routerCart from './routes/cartRoutes.js'
 
 const app = express()
 
+app.use(cookieParser(process.env.SIGNED_COOKIE))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODBURL,
+        mongoOptions: {useNewUrlParser:true, useUnifiedTopology:true},
+        ttl:30,
+    }),
+    secret : process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true
+}))
+
+
 app.use('/products',routerProd)
 app.use('/cart',routerCart)
 

@@ -8,3 +8,9 @@ export const getManagerMensajes = async () =>{
     const modeloMensajes = process.env.SELECTEDBDD === 1 ? await import('./MongoDB/models/Message') : await import('./Postgresql/models/Message')
     return modeloMensajes
 }
+export const getManagerUsers = async () => {
+    const modelUser = process.env.SELECTEDBDD == 1 ? await import('./MongoDB/models/User.js') :
+        await import('./Postgresql/models/User.js')
+
+    return modelUser
+}
