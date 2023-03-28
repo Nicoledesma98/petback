@@ -1,4 +1,4 @@
-import { GestorMongoDB } from "../../db/gestorMongoDB.js";
+import { GestorMongoDB } from "../../../db/gestorMongoDB.js";
 import { Schema } from "mongoose";
 
 const userSchema = new Schema({
