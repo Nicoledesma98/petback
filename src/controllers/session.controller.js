@@ -4,7 +4,7 @@ export const getSession = (req,res,next) =>{
             'divMessage': 'hola'
         })
     } else {///no esta activa la sesion redirecciona al login
-        res.redirect('/api/users/login',{
+        res.redirect('/api/user/login',{
 
         })
     }
@@ -17,7 +17,7 @@ export const testLogin = (req,res,next) =>{
             req.session.login = true
             res.redirect("/product")
         }else {
-            res.redirect("/api/users/login")
+            res.redirect("/api/user/login")
         }
     }catch(error){
         res.status(500).json({
@@ -30,7 +30,7 @@ export const testLogin = (req,res,next) =>{
 export const destroySession = (req,res,next) =>{
     if(req.session.login) {
         req.session.destroy(() => {
-            res.redirect("/api/users/login")
+            res.redirect("/api/user/login")
         })
     }
 }

@@ -48,7 +48,7 @@ const upload = multer({ storage: storage })
 
 //Routes
 app.use('/products',routerProd)
-app.use('/user/',routerUser)
+app.use('/api/user/',routerUser)
 app.use('/api/cart',routerCart)
 app.use('/api/session',routerSession)
 

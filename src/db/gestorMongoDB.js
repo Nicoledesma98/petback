@@ -44,12 +44,11 @@ export class GestorMongoDB {
         }
     }
 
-    async updateElement(id, info) {
-        try{
-            const mensaje = await this.modelo.findByIdAndUpdate(id, info)
-            return mensaje
-        }catch(error){
-            console.log('Error en update de elemento en MongoDB',error)
+    async updateElement(id, ...info) {
+        try {
+            return await this.model.findByIdAndUpdate(id, ...info)
+        } catch (error) {
+            return error
         }
     }
     async deleteElement(id) {
