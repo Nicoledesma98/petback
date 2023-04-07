@@ -1,6 +1,7 @@
-import {  cartDaoMongoDB } from "../dao/MongoDB/models/Cart.js";
+import { getManagerCart } from "../dao/daoManager.js";
+const data = await getManagerCart()
+const cartMongoDB = new data.cartDaoMongoDB
 
-const cartMongoDB = new cartDaoMongoDB()
 cartMongoDB.setConexion()
 
 export const getProductsCart = async (req,res) => {

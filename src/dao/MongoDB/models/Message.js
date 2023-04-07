@@ -1,4 +1,4 @@
-import { GestorMongoDB } from "../../../db/gestorMongoDB.js";
+import { GestorMongoDB } from "../db/gestorMongoDB.js";
 
 const esquema = {
     name:{type: String, require:true,max:50},

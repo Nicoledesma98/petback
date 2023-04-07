@@ -1,8 +1,7 @@
 import { Schema} from "mongoose";
-import { GestorMongoDB } from "../../../db/gestorMongoDB.js";
+import { GestorMongoDB } from "../db/gestorMongoDB.js";
 import paginate from 'mongoose-paginate-v2'
 
-const url = process.env.MONGODBURL
 
 const prodSchema = new Schema({
     name: {
@@ -39,7 +38,7 @@ prodSchema.plugin(paginate)
 
 export class prodDaoMongoDB extends GestorMongoDB {
     constructor(){
-        super(url,'products',prodSchema)
+        super(process.env.MONGODBURL,'products',prodSchema)
 
     }
     async getProducts(limit, page, filter, ord){

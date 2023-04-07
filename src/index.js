@@ -3,16 +3,16 @@ import express from "express"
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
+import passport from 'passport'
 import multer from 'multer'
 import { engine } from 'express-handlebars'
 import { __dirname } from './path.js'
 import * as path from 'path'
 import { Server } from 'socket.io'
 import {getManagerMensajes} from './dao/daoManager.js'
-import routerProd from './routes/productRoutes.js'
-import routerCart from './routes/cartRoutes.js'
-import routerUser from './routes/userRoutes.js'
-import routerSession from './routes/sessionRoutes.js'
+import router from './routes/routes.js'
+import initializePassport from './config/passport.js'
+
 
 const app = express()
 //Middlewares
@@ -29,6 +29,12 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+//passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 app.engine("handlebars", engine())
 app.set("view engine", "handlebars")
 app.set("views", path.resolve(__dirname, "./views"))
@@ -47,11 +53,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 //Routes
-app.use('/products',routerProd)
-app.use('/api/user/',routerUser)
-app.use('/api/cart',routerCart)
-app.use('/api/session',routerSession)
-
+app.use('/',router)
 
 
 const server = app.listen(app.get('port'), () => console.log(`Server on port ${app.get('port')}`))

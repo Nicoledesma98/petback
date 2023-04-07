@@ -1,6 +1,8 @@
-import { prodDaoMongoDB } from "../dao/MongoDB/models/Product.js";
+import { getManagerProductos } from "../dao/daoManager.js";
 
-const prodMongoDB = new prodDaoMongoDB()
+const data = await getManagerProductos()
+const prodMongoDB = new data.prodDaoMongoDB
+
 prodMongoDB.setConexion()
 
 
