@@ -54,7 +54,11 @@ const upload = multer({ storage: storage })
 
 //Routes
 app.use('/',router)
-
+app.get('/login',(req,res) =>{
+    res.render('login',{
+        title :'iniciar sesion'
+    })
+})
 
 const server = app.listen(app.get('port'), () => console.log(`Server on port ${app.get('port')}`))
 const io = new Server(server)
