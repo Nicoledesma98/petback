@@ -72,7 +72,10 @@ const initializePassport = () =>{
         }))
          ///inicializar la session del user
         
-         passport.serializeUser((user,done) =>{
+         passport.serializeUser((user, done) => {
+            if (Array.isArray(user)) {
+                done(null, user[0]._id)
+            }
             done(null, user._id)
         })
         // eliminar la session del user
