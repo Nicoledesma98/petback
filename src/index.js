@@ -16,7 +16,7 @@ import initializePassport from './config/passport.js'
 
 const app = express()
 //Middlewares
-app.use(cookieParser(process.env.SIGNED_COOKIE))
+app.use(cookieParser(process.env.PRIVATE_KEY_JWT))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(session({

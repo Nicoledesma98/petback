@@ -1,12 +1,35 @@
 import local from 'passport-local' 
 import passport from 'passport'
 import GitHubStrategy from 'passport-github2'
+import jwt from 'passport-jwt'
 import { userMongoDB } from '../controllers/user.controller.js'
 import { createHash,validatePassword} from '../utils/bcrypt.js'
+import { generateToken } from '../utils/jwt.js'
+
 ///passport se va a trabajar como un middleware
 const LocalStrategy = local.Strategy  ///defino mi estrategia
+const JWTStrategy = jwt.Strategy
+const ExtractJWT = jwt.ExtractJwt
 
 const initializePassport = () =>{
+
+    const cookieExtractor = req =>{
+       const token = (req && req.cookies) ? req.cookies('jwtCookies') : null
+    return token 
+    }
+    
+
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: process.env.PRIVATE_KEY_JWT
+    },async(jwt_payload,done)=>{
+        try{
+            return done(null,jwt_payload)
+        }catch(error){
+            return done(error)
+        }
+    }))
+
     passport.use('register',new LocalStrategy(
         {passReqToCallback: true, usernameField :'email'},async(req,username,password,done)=>{
             const {first_name, last_name, email, age} = req.body
@@ -23,7 +46,8 @@ const initializePassport = () =>{
                     age: age,
                     passport: passwordHash
                 }])
-                console.log(userCreated)
+                const accessToken = generateToken(userCreated)
+                console.log(accessToken)
                 return done (null,userCreated)
             }catch(error){
                 return done (error)
@@ -38,6 +62,8 @@ const initializePassport = () =>{
                     return done (null,false)
                 }
                 if(validatePassword(password,user.password)){//usuario y contraseña validos
+                   const accessToken = generateToken(user)
+                   console.log(accessToken)
                     return done(null,user)
                 }
                 return done (null,false) // contraseña no valida
@@ -75,8 +101,9 @@ const initializePassport = () =>{
          passport.serializeUser((user, done) => {
             if (Array.isArray(user)) {
                 done(null, user[0]._id)
+            }else{
+                done(null, user._id)
             }
-            done(null, user._id)
         })
         // eliminar la session del user
         passport.deserializeUser(async(id,done)=>{
