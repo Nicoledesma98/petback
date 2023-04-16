@@ -26,7 +26,11 @@ const userSchema = new Schema({
     password:{
         type: String,
         requered:true
-    }
+    },
+    id_cart: {
+        type: mongoose.Types.ObjectId,
+        ref: "carts",
+    },
 })
 
 export class UserDaoMongoDB extends GestorMongoDB {
