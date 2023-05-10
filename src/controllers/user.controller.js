@@ -1,18 +1,27 @@
-import { getManagerUsers } from "../dao/daoManager.js";
+import { findElementByEmail, findUsersById,setConexion,findAllUser } from "../services/UserServices.js"
 
-const data = await getManagerUsers()
-export const userMongoDB = new data.UserDaoMongoDB
-
-userMongoDB.setConexion()
+setConexion()
 
 export const createUser = (req,res) =>{
     res.send({status: 'success', message:'User created' })  
 }
 
+export const getAllUser = async (req,res) => {
+    try {
+        const users = await findAllUser()
+        console.log('esto es users',users)
+        return res.status(200).json(users)
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
 export const getUserById = async (req,res) =>{
     const {id} = req.params
     try {
-        const user = await userMongoDB.getElementById(id)
+        const user = await findUsersById(id)
         if(user){
             return res.status(200).json({
                 message: user
@@ -28,14 +37,18 @@ export const getUserById = async (req,res) =>{
     }
 }
 
-export const getUserByEmail = async (email) =>{
+export const getUserByEmail = async (email,req,res) =>{
     try {
-        const user = await userMongoDB.getElementByEmail(email)
+        const user = await findElementByEmail(email)
         if(user){
-            return user
+            return res.status(200).json(user)
         }
-        return 'usuario no encontrado'
+        res.status(200).json({
+            message:'usuario no encontrado'
+        })
     }catch(error){
-        return error
+        res.status(500).json({
+            message: error.message
+        })
     }
 }

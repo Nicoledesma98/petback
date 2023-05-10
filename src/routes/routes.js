@@ -4,6 +4,7 @@ import routerCart from "./cartRoutes.js";
 import routerSession from "./sessionRoutes.js";
 import routerUser from "./userRoutes.js";
 import routerGithub from "./github.js";
+import routerTicket from "./ticketRoutes.js";
 
 const router = Router()
 
@@ -12,6 +13,7 @@ router.use('/user',routerUser)
 router.use('/api/cart',routerCart)
 router.use('/api/session',routerSession)
 router.use('/session',routerGithub)
+router.use('/ticket',routerTicket)
 router.use('*',(req,res) =>{
     res.status(404).send({ error:'404 ruta no encontrada'})
 })

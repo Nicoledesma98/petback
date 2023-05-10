@@ -9,7 +9,7 @@ import { engine } from 'express-handlebars'
 import { __dirname } from './path.js'
 import * as path from 'path'
 import { Server } from 'socket.io'
-import {getManagerMensajes} from './dao/daoManager.js'
+import { addElements } from './services/MessageServices.js'
 import router from './routes/routes.js'
 import initializePassport from './config/passport.js'
 
@@ -64,9 +64,7 @@ const server = app.listen(app.get('port'), () => console.log(`Server on port ${a
 const io = new Server(server)
 io.on('connection',async (socket) =>{
     socket.on('message',async (info) =>{
-        const data = await getManagerMensajes()
-        const managerMessage = new data.MensajeDaoMongoDB
-        managerMessage.addElements().then((mensajes) =>{
+        const data = await addElements().then((mensajes) =>{
             console.log(mensajes)
             socket.emit('allMessages',mensajes)
         })

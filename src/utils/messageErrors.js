@@ -30,3 +30,23 @@ export const authorization = (rol) => {
         next()
     }
 }
+
+export const isAdmin = () => {
+    return async (req,res,next) => {
+        if (req.user && req.user.user[0].rol === 'Admin') {
+        next()
+    } else {
+        res.status(401).json({message : 'no autorizado'})
+    }
+    }
+}
+
+export const isUser = () => {
+    return async (req,res,next) => {
+        if (req.user && req.user.user[0].rol === 'User') {
+            next()
+        } else {
+            res.status(401).json({message : 'no autorizado'})
+        }
+    }
+}

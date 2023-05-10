@@ -1,18 +1,15 @@
-import { getManagerProductos } from "../dao/daoManager.js";
+import { findElementById,findProducts,addElements,deleteElement,updateElement,setConexion } from "../services/ProductServices.js"
 
-const data = await getManagerProductos()
-const prodMongoDB = new data.prodDaoMongoDB
+setConexion()
 
-prodMongoDB.setConexion()
-
-
-export const getProducts = async (req,res)=>{///getproducts
+export const getProducts = async (req,res)=>{///getproducts//esto es de aca
     const {limit, page, filter, sort} = req.query
     const pag = page != undefined ? page : 1
     const limi = limit != undefined ? limit : 10
     const ord = sort == "asc" ? 1 : -1
     try{
-        const products = await prodMongoDB.getProducts(limi,pag,filter,ord)
+        const products = await findProducts(limi,pag,filter,ord)
+        console.log('esto es products',products)
         if(products){
             return res.status(200).json(products)
         }
@@ -25,16 +22,12 @@ export const getProducts = async (req,res)=>{///getproducts
         })
 
     }
-    
-    console.log('esto es productos en product routes',products)
-    console.log(typeof products,'esto es products')
-   return products
 }
 
 export const getProductById =  async(req,res)=>{///getproductsbyid
     const {id} = req.params
     try{
-        const product = await prodMongoDB.getElementById(id)
+        const product = await findElementById(id)
         if(product){
             return res.status(200).json(product)
         }
@@ -51,7 +44,7 @@ export const getProductById =  async(req,res)=>{///getproductsbyid
 export const createProduct =  async (req,res) =>{///createproduct
     const {name, description, code, stock, category, price} = req.body
     try{
-        const producto = await prodMongoDB.addElements([{name, description, code, stock, category, price}])
+        const producto = await addElements([{name, description, code, stock, category, price}])
         res.status(204).json(producto)
     }catch (error){
         res.status(500).json({
@@ -64,7 +57,7 @@ export const createProduct =  async (req,res) =>{///createproduct
 export const deleteProduct = async (req, res) => {///deleteproduct
     const {id} = req.params
     try{
-    const productos = await prodMongoDB.deleteElement(id) 
+    const productos = await deleteElement(id) 
     if(productos) {
         return res.status(200).json({
             message:'producto eliminado'
@@ -84,7 +77,7 @@ export const updateProduct = async (req,res)=>{///updateproduct
     const {id} = req.params
     const {name, description, code, stock, category, price} = req.body
     try{
-        const product = await prodMongoDB.updateElement(id,{name: name,description: description,code: code,stock: stock,category: category,price: price})
+        const product = await updateElement(id,{name: name,description: description,code: code,stock: stock,category: category,price: price})
         if(product){
             return res.status(200).json({
                 message:'producto actualizado'

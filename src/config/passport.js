@@ -2,7 +2,7 @@ import local from 'passport-local'
 import passport from 'passport'
 import GitHubStrategy from 'passport-github2'
 import jwt from 'passport-jwt'
-import { userMongoDB } from '../controllers/user.controller.js'
+import { findElementByEmail,getElementById,addElements } from '../services/UserServices.js'
 import { createHash,validatePassword} from '../utils/bcrypt.js'
 import { generateToken } from '../utils/jwt.js'
 
@@ -14,14 +14,18 @@ const ExtractJWT = jwt.ExtractJwt
 const initializePassport = () =>{
 
     const cookieExtractor = req =>{
-       const token = (req && req.cookies) ? req.cookies('jwtCookies') : null
-    return token 
+        console.log(req.cookies)
+        //{} no hay cookies != esta cookie no existe
+        //Si existen las cookies, asigno mi cookie en especifico sino asigno null
+        const token = req.cookies ? req.cookies.jwtCookie : {}
+        console.log('esto es token',token)
+        return token
     }
     
 
     passport.use('jwt', new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: process.env.PRIVATE_KEY_JWT
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),/// el token se extrae desde las cookies
+        secretOrKey: process.env.PRIVATE_KEY_JWT///desesncriptar
     },async(jwt_payload,done)=>{
         try{
             return done(null,jwt_payload)
@@ -34,12 +38,12 @@ const initializePassport = () =>{
         {passReqToCallback: true, usernameField :'email'},async(req,username,password,done)=>{
             const {first_name, last_name, email, age} = req.body
             try{
-                const user = await userMongoDB.getElementByEmail(username)
+                const user = await findElementByEmail(username)
                 if(user){
                     return done(null,false)
                 }
                 const passwordHash = createHash(password)
-                const userCreated = await userMongoDB.addElements([{
+                const userCreated = await addElements([{
                     first_name: first_name,
                     last_name: last_name,
                     email: email,
@@ -57,7 +61,7 @@ const initializePassport = () =>{
         
         passport.use('login',new LocalStrategy({usernameField : 'email'}, async ( username, password,done) =>{
             try {
-                const user = await userMongoDB.getElementByEmail(username)
+                const user = await findElementByEmail(username)
                 if(!user){//usuario no encontrado
                     return done (null,false)
                 }
@@ -79,11 +83,11 @@ const initializePassport = () =>{
         },async (accessToken, refreshToken,profile,done) =>{
             try{
                 console.log(accessToken)
-                const user = await userMongoDB.getElementByEmail(profile._json.email)
+                const user = await findElementByEmail(profile._json.email)
                 if(user){//si existe user en la bdd
                     done(null,user)
                 }else{
-                    const userCreated = await userMongoDB.addElements([{
+                    const userCreated = await addElements([{
                         first_name: profile._json.name,
                         last_name:' ',//porque github no posee nombre y apellido
                         email: profile._json.email,
@@ -107,7 +111,7 @@ const initializePassport = () =>{
         })
         // eliminar la session del user
         passport.deserializeUser(async(id,done)=>{
-            const user = userMongoDB.getElementById(id)
+            const user = getElementById(id)
             done(null,user)
         })
 }
