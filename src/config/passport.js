@@ -66,6 +66,7 @@ const initializePassport = () =>{
                     return done (null,false)
                 }
                 if(validatePassword(password,user.password)){//usuario y contraseña validos
+                    console.log("esto es validate password", password, "esto es user password",user.password)
                    const accessToken = generateToken(user)
                    console.log(accessToken)
                     return done(null,user)

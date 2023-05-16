@@ -30,7 +30,6 @@ export const authorization = (rol) => {
         next()
     }
 }
-
 export const isAdmin = () => {
     return async (req,res,next) => {
         if (req.user && req.user.user[0].rol === 'Admin') {
@@ -40,7 +39,6 @@ export const isAdmin = () => {
     }
     }
 }
-
 export const isUser = () => {
     return async (req,res,next) => {
         if (req.user && req.user.user[0].rol === 'User') {

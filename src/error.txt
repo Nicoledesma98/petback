@@ -1,0 +1,29 @@
+posibles errores:
+Register: {
+    Nº1: Datos existentes
+    Nº2: email invalido
+    Nº3: contraseña demasiado corta
+} 
+Login: {
+    Nº4: Datos invalidos y/o inexistentes
+    Nº5: Cuenta bloqueada
+}
+Users: {
+    Nº6: Email ya utilizado
+    Nº7: Usuario no encontrado
+
+}
+Products: {
+    Nº8: Producto no encontrado
+    Nº9: Producto no creado
+    Nº10: Producto ya creado
+
+}
+Carts: {
+    Nº11: Carrito no encontrado
+    Nº12: Carrito bloqueado, Falta validar email
+}
+Routes: {
+    Nº13: Direccion no encontrada
+    Nº14: Acceso restringido, solo para Admin 
+}
