@@ -1,14 +1,14 @@
-import mockModel from "../models/Mock.js";
-import { faker } from "@faker-js/faker"
+// import mockModel from "../models/Mock.js";
+// import { faker } from "@faker-js/faker"
 
-export const productRandom = async (products) =>{
-    try {
-        const result = await mockModel.insertMany(products)
-        return result
-    } catch (error) {
-        return error
-    }
-}
+// export const productRandom = async (products) =>{
+//     try {
+//         const result = await mockModel.insertMany(products)
+//         return result
+//     } catch (error) {
+//         return error
+//     }
+// }
 
 
 // import { faker } from '@faker-js/faker';

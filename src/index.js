@@ -12,7 +12,7 @@ import { Server } from 'socket.io'
 import { addElements } from './services/MessageServices.js'
 import router from './routes/routes.js'
 import initializePassport from './config/passport.js'
-
+import { addLogger } from './utils/loggers.js'
 
 const app = express()
 //Middlewares
@@ -53,6 +53,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 //Routes
+app.use(addLogger)
 app.use('/',router)
 app.get('/login',(req,res) =>{
     res.render('login',{

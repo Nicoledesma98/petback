@@ -1,15 +1,18 @@
 import { findTicket,findTicketById,createTicket,setConexion } from "../services/TicketServices.js";
 import userModel from '../models/User.js'
 import ticketModel from "../models/Ticket.js";
-
+import getLogger from "../utils/loggers.js";
 setConexion()
+const logger = getLogger()
 
 export const getTicket = async(req,res)=>{
     try{
         const ticket = await findTicket()
+        logger.info('estos son todos los tickets',ticket)
         res.status(200).json(ticket)
 
     }catch(error){
+        logger.error('Error en buscar los tickets',error)
         res.status(500).json('Ocurrio un error en getTicket',error)
     }
 }
@@ -18,8 +21,10 @@ export const getTicketById = async (req,res) =>{
     try{
     const {tid} = req.params
     const ticket = await findTicketById(tid)
+    logger.info('Ticket encontrado por id: ',ticket)
     res.status(200).json(ticket)
     }catch(error){
+        logger.error('Error en buscar ticket por id', error)
         res.status(500).json('Ocurrio un error en getTicketById',error)
     }
     
@@ -42,8 +47,10 @@ export const postTicket = async(req,res) =>{
          //purchaser: tengo que llamar al schema de users y poner el email que seria user.email
          
         })
+        logger.info('ticket creado correctamente', newTicket)
         res.status(200).json(newTicket)
     } catch (error) {
+        logger.error('error en crear el ticket',error)
         res.status(500).json('Ocurrio un error en postTicket',error)
     }
 }
